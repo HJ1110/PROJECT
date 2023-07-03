@@ -1,0 +1,17 @@
+import yfinance as yf
+import pandas as pd
+
+# Create a ticker object for GameStop (GME)
+gme = yf.Ticker('GME')
+
+# Get the historical data
+gme_data = gme.history(period='max')
+
+# Reset the index
+gme_data.reset_index(inplace=True)
+
+# Save the data
+gme_data.to_csv('gme_data.csv', index=False)
+
+# Display the first five rows
+print(gme_data.head())
