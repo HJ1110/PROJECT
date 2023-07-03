@@ -1,0 +1,34 @@
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+
+# URL for GME revenue data
+url = "https://www.macrotrends.net/stocks/charts/GME/gamestop/revenue"
+
+# Send a GET request to the URL
+response = requests.get(url)
+
+# Create a BeautifulSoup object
+soup = BeautifulSoup(response.text, "html.parser")
+
+# Find the revenue table
+table = soup.find("table", class_="historical_data_table")
+
+# Extract the table headers
+headers = [header.text.strip() for header in table.find_all("th")]
+
+# Extract the table rows
+rows = []
+for row in table.find_all("tr"):
+    cells = row.find_all("td")
+    if len(cells) == len(headers):
+        rows.append([cell.text.strip() for cell in cells])
+
+# Create the dataframe
+gme_revenue = pd.DataFrame(rows, columns=headers)
+
+# Print the dataframe
+print(gme_revenue)
+
+# Print the size of the dataframe
+print("DataFrame size:", gme_revenue.shape)
